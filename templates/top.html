@@ -12,9 +12,9 @@
       <h1>Uzmini skaitli!</h1>
       <ul>
         <li><a href="/">Sākums</a></li>
-        <li><a href="game">Spēle</a></li>
-        <li><a href="top">Rezultāti</a></li>
-        <li><a href="about">Par</a></li>
+        <li><a href="game.html">Spēle</a></li> <!-- Verlinkung zu game.html korrigiert -->
+        <li><a href="top.html">Rezultāti</a></li> <!-- Verlinkung zu top.html korrigiert -->
+        <li><a href="about.html">Par</a></li> <!-- Verlinkung zu about.html korrigiert -->
       </ul>
     </div> <!-- Ende Header -->
 
@@ -41,7 +41,7 @@
   <!-- JavaScript: lädt die Daten von /topData -->
   <script>
     window.onload = function() {
-      fetch("/topData")
+      fetch("/topData")  <!-- Stelle sicher, dass dein Server diese Route unterstützt -->
         .then(response => response.json())
         .then(data => {
           const tabula = document.getElementById("rezultati");

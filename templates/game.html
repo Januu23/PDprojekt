@@ -12,9 +12,9 @@
       <h1>Uzmini skaitli!</h1>
       <ul>
         <li><a href="/">Sākums</a></li>
-        <li><a href="game">Spēle</a></li>
-        <li><a href="top">Rezultāti</a></li>
-        <li><a href="about">Par</a></li>
+        <li><a href="game.html">Spēle</a></li>
+        <li><a href="top.html">Rezultāti</a></li>
+        <li><a href="about.html">Par</a></li>
       </ul>
     </div> <!-- Ende Header -->
 
@@ -36,7 +36,8 @@
       <p id="message"></p>
 
       <br>
-      <button onclick="location.href='templates/top.html'">Uz rezultātiem</button>
+      <!-- Link zur Rangliste -->
+      <button onclick="window.location.href='top.html'">Uz rezultātiem</button>
     </div> <!-- Ende Content -->
 
   </div> <!-- Ende Wrapper -->
@@ -49,13 +50,6 @@
     window.onload = function() {
       const vards = sessionStorage.getItem("playerName");
       const limenis = sessionStorage.getItem("playerLevel");
-
-      // Überprüfen, ob die sessionStorage-Daten existieren
-      if (!vards || !limenis) {
-        alert("Lūdzu, reģistrējieties spēlē pirms uzsākšanas.");
-        window.location.href = "index.html"; // Zur Startseite weiterleiten
-        return;
-      }
 
       // Name und Level anzeigen
       document.getElementById("speleris").textContent = vards;
@@ -117,7 +111,7 @@
           .then(() => {
             setTimeout(() => {
               alert(`Apsveicu! Tu uzminēji ar ${meginajumi} mēģinājumiem ${laiksSekundes} sekundēs!`);
-              window.location.href = "top.html";
+              window.location.href = "top.html";  // Weiterleitung zur Rangliste
             }, 500);
           })
           .catch(err => {
