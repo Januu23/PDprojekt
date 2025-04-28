@@ -32,11 +32,11 @@ def about():
 def top_data():
     try:
         top_rezultati = get_top_results()
-        top_5 = sorted(top_rezultati, key=lambda x: (x['klikski'], x['laiks']))[:5]
+        top_5 = sorted(top_rezultati, key=lambda x: (x['meginajumi'], x['laiks']))[:5]
         return jsonify(top_5), 200
     except Exception as e:
-        print(f"Fehler beim Laden der Top-Daten: {str(e)}")
-        return jsonify({'status': 'error', 'message': 'Fehler beim Laden der Top-Daten!'}), 500
+        print(f"Kļūda: {str(e)}")
+        return jsonify({'status': 'error', 'message': 'Kļūda!'}), 500
 
 # Saglabā rezultātu pēc pareizas minēšanas
 @app.route('/pievienot-rezultatu', methods=['POST'])
@@ -49,8 +49,8 @@ def pievienot_rezultatu():
             json.dump(top_5, f, ensure_ascii=False, indent=4)
         return jsonify({'status': 'success'}), 200
     except Exception as e:
-        print(f"Fehler beim Hinzufügen des Ergebnisses: {str(e)}")
-        return jsonify({'status': 'error', 'message': 'Fehler beim Hinzufügen des Ergebnisses!'}), 500
+        print(f"Kļūda: {str(e)}")
+        return jsonify({'status': 'error', 'message': 'Kļūda!'}), 500
 
 # Spēles sākšana – iestata līmeni, slepeno skaitli un sākuma laiku
 @app.route('/start_game', methods=['POST'])
@@ -80,8 +80,8 @@ def start_game():
 
         return jsonify({'status': 'success', 'message': f'Spēle sākta! Skaitļu diapazons: 1–{maksimalais_skaitlis}'}), 200
     except Exception as e:
-        print(f"Fehler beim Starten des Spiels: {str(e)}")
-        return jsonify({'status': 'error', 'message': 'Fehler beim Starten des Spiels!'}), 500
+        print(f"Kļūda: {str(e)}")
+        return jsonify({'status': 'error', 'message': 'Kļūda!'}), 500
 
 # Spēlētāja minējuma apstrāde
 @app.route('/guess', methods=['POST'])
@@ -117,10 +117,10 @@ def guess():
                 'message': f'Pareizi! Tu minēji ar {session["meginajumi"]} mēģinājumiem. Laiks: {time_taken} sek.'
             }), 200
     except KeyError as e:
-        return jsonify({'status': 'error', 'message': f"Fehler: {str(e)}"}), 400
+        return jsonify({'status': 'error', 'message': f"Kļūda: {str(e)}"}), 400
     except Exception as e:
         print(f"Fehler beim Verarbeiten des Minens: {str(e)}")
-        return jsonify({'status': 'error', 'message': f"Unbekannter Fehler: {str(e)}"}), 500
+        return jsonify({'status': 'error', 'message': f"Kļūda: {str(e)}"}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
