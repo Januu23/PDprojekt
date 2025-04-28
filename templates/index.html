@@ -1,10 +1,11 @@
-<!--spielregeln-->
+
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
   <link href="static/style.css" rel="stylesheet">
   <title>Atmiņas spēle</title>
+  
 </head>
 <body>
   <div class="wrapper">
@@ -26,18 +27,67 @@
       </ul>
     </div> <!--Beidzas header-->
 
-    <div class="content">
+    <div class="container">
+      <!-- Linke Spalte: Spielregeln -->
+      <div class="left">
         <h3>Noteikumi</h3>
-        <p>Sameklē vienādo figūru pārus ar pēc iespējas mazāko klikšīņāšanu skaitu.</p>
-        <h3>Spēlētāja pieteikšanās</h3>
-        Vārds:<input id="vards"/>
-        <button onclick="saktSpeli()">Sāk spēli</button>
-  
-  
-      </div> <!--Beidzas content-->
-  
-    </div> <!--Beidzas wrapper-->
-  <script src="static/sakums.js"></script>
-  
-  </body>
-  </html>
+        <!-- Spielregeln -->
+        <p>
+          Noteikumi:
+          
+          1. Dators nejauši izvēlas skaitli no 1 līdz 100.
+          2. Spēlētāja uzdevums ir minēt šo skaitli pēc iespējas mazākos mēģinājumos.          
+          3. Pēc katra minējuma spēlētājs saņem norādi:
+          "Par maz!" — ja ievadītais skaitlis ir mazāks par pareizo.
+          "Par daudz!" — ja ievadītais skaitlis ir lielāks par pareizo.
+          "Pareizi!" — ja skaitlis ir uzminēts.
+          4. Spēle turpinās, līdz spēlētājs uzmin pareizo skaitli.
+          5. Kad skaitlis ir uzminēts, tiek parādīts, cik mēģinājumi bija nepieciešami.
+          
+          Spēlētājs var sākt jaunu spēli vai iziet no programmas.
+            <!-- Hier kannst du detailliertere Spielregeln einfügen, die für dein Spiel spezifisch sind -->
+        </p>
+      </div> <!--Beidzas left-->
+
+         <!-- Name Eingabe -->
+         <label for="vards">Vārds:</label>
+         <input type="text" id="vards" placeholder="Ievadi savu vārdu"><br><br>
+   
+         <!-- Level Auswahl -->
+         <label for="level">Izvēlies līmeni:</label>
+         <select id="level">
+             <option value="1">1-100</option>
+             <option value="2">1-500</option>
+             <option value="3">1-1000</option>
+         </select><br><br>
+   
+         <!-- Start Button -->
+         <button onclick="startGame()">Sākt spēli</button>
+   
+       </div> <!-- Beidzas content -->
+   
+     </div> <!-- Beidzas wrapper -->
+   
+     <script>
+       // Funktion zum Starten des Spiels
+       function startGame() {
+         let name = document.getElementById("vards").value;
+         let level = document.getElementById("level").value;
+   
+         // Sicherstellen, dass der Name eingegeben wurde
+         if (name === '') {
+           alert("Lūdzu, ievadiet savu vārdu!");
+           return;
+         }
+   
+         // Den Namen und Level in der Session speichern
+         sessionStorage.setItem('playerName', name);
+         sessionStorage.setItem('playerLevel', level);
+   
+         // Umleiten zu game.html, um das Spiel zu starten
+         window.location.href = "game.html";
+       }
+     </script>
+   
+   </body>
+   </html>

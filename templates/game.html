@@ -1,4 +1,4 @@
-<!--Spiel an sich-->
+<!-- Spiel an sich -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,47 +24,70 @@
           <a href="about">Par</a>
         </li>
       </ul>
-    </div> <!--Beidzas header-->
+    </div> <!-- Beidzas header -->
 
     <h1>Minēšanas spēle</h1>
 
-    <label for="level">Izvēlies līmeni:</label>
-    <select id="level">
-        <option value="1">1-100</option>
-        <option value="2">1-500</option>
-        <option value="3">1-1000</option>
-    </select>
-    <button onclick="startGame()">Sākt spēli</button>
+    <!-- Anzeigen des Spielers und des Levels -->
+    <p>Spēlētājs: <span id="playerName"></span></p>
+    <p>Izvēlētais līmenis: <span id="playerLevel"></span></p>
 
-    <br><br>
-    <input type="number" id="guessInput" placeholder="Ievadi skaitli">
-    <button onclick="makeGuess()">Minēt</button>
+    <!-- Rateing -->
+    <input type="number" id="guessInput" placeholder="Ievadi skaitli" disabled>
+    <button onclick="makeGuess()" disabled>Minēt</button>
     <p id="message"></p>
 
-    <script>
-        function startGame() {
-            let level = document.getElementById("level").value;
-            fetch('/start_game', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ level: parseInt(level) })
-            })
-            .then(response => response.json())
-            .then(data => alert(data.message));
-        }
+  </div> <!-- Beidzas wrapper -->
 
-        function makeGuess() {
-            let guess = document.getElementById("guessInput").value;
-            fetch('/guess', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ guess: parseInt(guess) })
-            })
-            .then(response => response.json())
-            .then(data => document.getElementById("message").innerText = data.message);
-        }
-    </script>
-    
-<script src="static/game.js"></script>
+  <script>
+    // Spielername und Level aus der Session abrufen
+    window.onload = function() {
+      let playerName = sessionStorage.getItem('playerName');
+      let playerLevel = sessionStorage.getItem('playerLevel');
+
+      // Anzeigen des Namens und Levels
+      document.getElementById("playerName").textContent = playerName;
+      document.getElementById("playerLevel").textContent = playerLevel;
+
+      // Hier Spiel starten (z.B. Level setzen)
+      startGame(playerLevel);
+    }
+
+    function startGame(level) {
+      // Spiel mit dem ausgewählten Level starten
+      fetch('/start_game', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ level: parseInt(level) })
+      })
+      .then(response => response.json())
+      .then(data => {
+        alert(data.message);
+        // Rateing-Feld aktivieren, wenn das Spiel beginnt
+        document.getElementById("guessInput").disabled = false;
+        document.querySelector("button[onclick='makeGuess()']").disabled = false;
+      });
+    }
+
+    // Rateversuch
+    function makeGuess() {
+      let guess = document.getElementById("guessInput").value;
+
+      if (guess === '') {
+        alert("Lūdzu, ievadiet skaitli!");
+        return;
+      }
+
+      fetch('/guess', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ guess: parseInt(guess) })
+      })
+      .then(response => response.json())
+      .then(data => document.getElementById("message").innerText = data.message);
+    }
+  </script>
+
+  <script src="static/game.js"></script>
 </body>
 </html>

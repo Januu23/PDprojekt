@@ -1,4 +1,4 @@
-<!--rangliste-->
+<!-- Rangliste -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,25 +24,58 @@
           <a href="about">Par</a>
         </li>
       </ul>
-    </div> <!--Beidzas header-->
+    </div> <!-- Beidzas header -->
+
     <div class="content">
       <h3>Tops</h3>
       <button onclick='pievienotTop()'>Pievienoties top'am</button>
       <hr />
+      
+      <!-- Tabelle für die Rangliste -->
       <table class='tops'>
         <tr>
-          <td>Spēlētājs</td>
-          <td>Klikšķu skaits</td>
-          <td>Laiks</td>
-          <td>Datums</td>
+          <th>Spēlētājs</th>
+          <th>Laiks</th>
+          <th>Versiju skaits</th>
+          <th>Līmenis</th>
         </tr>
+        <!-- Dynamische Einträge werden hier eingefügt -->
+        <tbody id="topResults"></tbody>
       </table>
 
+    </div> <!-- Beidzas content -->
 
-    </div> <!--Beidzas content-->
+  </div> <!-- Beidzas wrapper -->
 
-  </div> <!--Beidzas wrapper-->
-<script src='static/top.js'></script>
+  <script>
+    // Funktion zum Laden der Top-Ergebnisse (dynamisch)
+    function loadTopResults() {
+      fetch('/topData')
+        .then(response => response.json())
+        .then(data => {
+          const topResultsContainer = document.getElementById('topResults');
+          topResultsContainer.innerHTML = ''; // Leert die Tabelle
+
+          // Iteriere über jedes Ergebnis und füge es zur Tabelle hinzu
+          data.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${item.vards}</td>
+              <td>${item.laiks} sekundes</td>
+              <td>${item.klikski}</td>
+              <td>${item.limenis}</td>
+            `;
+            topResultsContainer.appendChild(row);
+          });
+        })
+        .catch(error => console.error('Fehler beim Laden der Rangliste:', error));
+    }
+
+    // Aufruf der Funktion, wenn die Seite geladen wird
+    window.onload = loadTopResults;
+  </script>
+
+  <script src="static/top.js"></script>
 
 </body>
 </html>
