@@ -1,14 +1,9 @@
-//anfang gestaltung
-
-function saktSpeli()
-{
-  let ievaditsVards = document.querySelector('#vards').value;
-  if (ievaditsVards == '')
-  {
-    alert('Ievadiet vārdu!');
-  }
-  else
-  {
-    window.location = 'game#'+ievaditsVards;
+function startSpeli() {
+  let ievaditsVards = document.querySelector('#vards').value.trim(); // .trim() entfernt führende und nachfolgende Leerzeichen
+  if (ievaditsVards === '') {
+    alert('Lūdzu ievadiet vārdu!');
+  } else {
+    // Verwende encodeURIComponent, um sicherzustellen, dass der Name korrekt in der URL codiert wird
+    window.location.href = 'game#' + encodeURIComponent(ievaditsVards);
   }
 }

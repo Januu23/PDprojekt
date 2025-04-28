@@ -1,1 +1,134 @@
-/*gestaltung von der ganzen datei*/
+/* Basis-Styling für die gesamte Seite */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f8ff; /* Heller Hintergrund */
+    margin: 0;
+    padding: 0;
+}
+
+/* Äußerer Rahmen */
+.wrapper {
+    width: 90%;
+    margin: 20px auto;
+}
+
+/* Navigation oben */
+.header {
+    background-color: #b650d4; /* Grüner Balken */
+    color: white;
+    padding: 10px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+/* Navigationslinks */
+.header ul {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.header ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+.header ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.header ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Hauptinhalt */
+.content {
+    background-color: white;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px lightgray;
+}
+
+/* Überschriften im Inhalt */
+.content h2, .content h3 {
+    color: #333;
+}
+
+/* Eingabefelder und Auswahlfelder */
+input[type="text"],
+input[type="number"],
+select {
+    width: 80%;
+    padding: 8px;
+    margin-top: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Buttons */
+button {
+    background-color: #b650d4;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #7616b6; /* Etwas dunkleres Grün beim Hover */
+}
+
+/* Tabellen */
+table.tops {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+/* Tabellenkopf */
+.tops th {
+    background-color: #b650d4;
+    color: white;
+    padding: 10px;
+}
+
+/* Tabellenzellen */
+.tops td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Tabellenzeilen-Hovereffekt */
+.tops tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Fehlernachrichten oder Hinweise */
+#message {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+/* Responsive für kleinere Bildschirme */
+@media (max-width: 768px) {
+    .header ul li {
+        display: block;
+        margin: 10px 0;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+        width: 100%;
+    }
+}

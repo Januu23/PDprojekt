@@ -1,93 +1,128 @@
-<!-- Spiel an sich -->
 <!DOCTYPE html>
-<html>
+<html lang="lv">
 <head>
   <meta charset="UTF-8">
   <link href="static/style.css" rel="stylesheet">
-  <title>Atmiņas spēle</title>
+  <title>Uzmini skaitli!</title>
 </head>
 <body>
   <div class="wrapper">
+    <!-- Kopfzeile -->
     <div class="header">
-      <h1>Atmiņas spēle</h1>
+      <h1>Uzmini skaitli!</h1>
       <ul>
-        <li>
-          <a href="/">Sākums</a>
-        </li>
-        <li>
-          <a href="game">Spēle</a>
-        </li>
-        <li>
-          <a href="top">Tops</a>
-        </li>
-        <li>
-          <a href="about">Par</a>
-        </li>
+        <li><a href="/">Sākums</a></li>
+        <li><a href="game">Spēle</a></li>
+        <li><a href="top">Rezultāti</a></li>
+        <li><a href="about">Par</a></li>
       </ul>
-    </div> <!-- Beidzas header -->
+    </div> <!-- Ende Header -->
 
-    <h1>Minēšanas spēle</h1>
+    <!-- Spielbereich -->
+    <div class="content">
+      <h2>Minēšanas spēle</h2>
 
-    <!-- Anzeigen des Spielers und des Levels -->
-    <p>Spēlētājs: <span id="playerName"></span></p>
-    <p>Izvēlētais līmenis: <span id="playerLevel"></span></p>
+      <!-- Spielerinfo -->
+      <p><strong>Spēlētājs:</strong> <span id="speleris"></span></p>
+      <p><strong>Līmenis:</strong> <span id="limenis"></span></p>
+      <p><strong>Mēģinājumi:</strong> <span id="meginajumi">0</span></p>
 
-    <!-- Rateing -->
-    <input type="number" id="guessInput" placeholder="Ievadi skaitli" disabled>
-    <button onclick="makeGuess()" disabled>Minēt</button>
-    <p id="message"></p>
+      <!-- Rateeingabe -->
+      <label for="guessInput">Ievadi skaitli:</label><br>
+      <input type="number" id="guessInput" placeholder="1 līdz ..."><br><br>
+      <button onclick="makeGuess()">Minēt</button>
 
-  </div> <!-- Beidzas wrapper -->
+      <!-- Nachricht -->
+      <p id="message"></p>
 
+      <br>
+      <button onclick="location.href='top.html'">Uz rezultātiem</button>
+    </div> <!-- Ende Content -->
+
+  </div> <!-- Ende Wrapper -->
+
+  <!-- Spiel-Logik -->
   <script>
-    // Spielername und Level aus der Session abrufen
+    let meginajumi = 0;
+    let startLaiks;
+
     window.onload = function() {
-      let playerName = sessionStorage.getItem('playerName');
-      let playerLevel = sessionStorage.getItem('playerLevel');
+      const vards = sessionStorage.getItem("playerName");
+      const limenis = sessionStorage.getItem("playerLevel");
 
-      // Anzeigen des Namens und Levels
-      document.getElementById("playerName").textContent = playerName;
-      document.getElementById("playerLevel").textContent = playerLevel;
+      // Name und Level anzeigen
+      document.getElementById("speleris").textContent = vards;
+      document.getElementById("limenis").textContent = limenis;
 
-      // Hier Spiel starten (z.B. Level setzen)
-      startGame(playerLevel);
-    }
-
-    function startGame(level) {
-      // Spiel mit dem ausgewählten Level starten
-      fetch('/start_game', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ level: parseInt(level) })
+      // Spiel starten
+      fetch("/start_game", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ level: parseInt(limenis), vards: vards })
       })
       .then(response => response.json())
       .then(data => {
-        alert(data.message);
-        // Rateing-Feld aktivieren, wenn das Spiel beginnt
-        document.getElementById("guessInput").disabled = false;
-        document.querySelector("button[onclick='makeGuess()']").disabled = false;
+        document.getElementById("message").textContent = data.message;
+        startLaiks = Date.now(); // Startzeit merken
+      })
+      .catch(err => {
+        console.error("Kļūda startējot spēli:", err);
       });
-    }
+    };
 
-    // Rateversuch
     function makeGuess() {
-      let guess = document.getElementById("guessInput").value;
+      const guess = parseInt(document.getElementById("guessInput").value);
 
-      if (guess === '') {
-        alert("Lūdzu, ievadiet skaitli!");
+      if (isNaN(guess)) {
+        alert("Lūdzu, ievadiet derīgu skaitli!");
         return;
       }
 
-      fetch('/guess', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ guess: parseInt(guess) })
+      fetch("/guess", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ guess: guess })
       })
       .then(response => response.json())
-      .then(data => document.getElementById("message").innerText = data.message);
+      .then(data => {
+        meginajumi++;
+        document.getElementById("meginajumi").textContent = meginajumi;
+        document.getElementById("message").textContent = data.message;
+
+        // Wenn richtig geraten
+        if (data.result === "pareizi") {
+          const beiguLaiks = Date.now();
+          const laiksSekundes = Math.floor((beiguLaiks - startLaiks) / 1000);
+
+          // Ergebnis richtig vorbereiten: mit "meginajumi", nicht "kliksski"
+          const rezultats = {
+            vards: sessionStorage.getItem("playerName"),
+            meginajumi: meginajumi,
+            laiks: laiksSekundes,
+            limenis: sessionStorage.getItem("playerLevel")
+          };
+
+          fetch("/pievienot-rezultatu", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(rezultats)
+          })
+          .then(() => {
+            setTimeout(() => {
+              alert(`Apsveicu! Tu uzminēji ar ${meginajumi} mēģinājumiem ${laiksSekundes} sekundēs!`);
+              window.location.href = "top.html";
+            }, 500);
+          })
+          .catch(err => {
+            console.error("Kļūda saglabājot rezultātu:", err);
+          });
+        }
+      })
+      .catch(err => {
+        console.error("Kļūda minēšanas laikā:", err);
+      });
     }
   </script>
 
-  <script src="static/game.js"></script>
 </body>
 </html>

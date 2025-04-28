@@ -1,27 +1,33 @@
 import random
 import time
-from flask import Flask, render_template, request, jsonify, session
 import json
+from flask import Flask, render_template, request, jsonify, session
 from datubaze import get_top_results, pievienot
 
 app = Flask(__name__)
+app.secret_key = "supersecretkey"  # Für die Sitzungsverwaltung
 
+#  Sākumlapa
 @app.route('/')
 def index():
     return render_template("index.html")
 
+#  Spēles lapa
 @app.route('/game')
 def game():
     return render_template("game.html")
 
+#  Top rezultāti
 @app.route('/top')
 def top():
     return render_template("top.html")
 
+# ℹ️ Par spēli
 @app.route('/about')
 def about():
     return render_template("about.html")
 
+#  API: Top dati (atgriež 5 labākos pēc klikšķiem un laika)
 @app.route('/topData', methods=['GET'])
 def top_data():
     try:
@@ -30,7 +36,8 @@ def top_data():
         return jsonify(top_5), 200
     except Exception:
         return jsonify({'status': 'error'}), 500
-    
+
+#  Saglabā rezultātu pēc pareizas minēšanas
 @app.route('/pievienot-rezultatu', methods=['POST'])
 def pievienot_rezultatu():
     dati = request.json
@@ -43,16 +50,15 @@ def pievienot_rezultatu():
     except Exception:
         return jsonify({'status': 'error'}), 500
 
-
-app.secret_key = "supersecretkey"  # Für die Sitzungsverwaltung
-
-# 🟢 Starten des Spiels und Festlegen des Levels
+#  Spēles sākšana – iestata līmeni, slepeno skaitli un sākuma laiku
 @app.route('/start_game', methods=['POST'])
 def start_game():
-    """Setzt das Level und startet das Spiel."""
+    """Saņem līmeni un vārdu, iestata sesiju un sāk spēli."""
     dati = request.json
     limenis = dati.get("level", 1)
+    vards = dati.get("vards", "Anonīms")  # Spēlētāja vārds
 
+    # Noteikt maksimālo skaitli pēc līmeņa
     if limenis == 1:
         maksimalais_skaitlis = 100
     elif limenis == 2:
@@ -62,21 +68,24 @@ def start_game():
     else:
         return jsonify({'status': 'error', 'message': 'Nederīgs līmenis'}), 400
 
-    session['maksimalais_skaitlis'] = maksimalais_skaitlis  # Speichert den Zahlenbereich
-    session['slepenais_skaitlis'] = random.randint(1, maksimalais_skaitlis)  # Generiert eine Zufallszahl
-    session['meginajumi'] = 0  # Setzt die Versuche auf 0
-    session['start_time'] = time.time()  # Startzeit des Spiels
+    # Saglabāt sesijā
+    session['maksimalais_skaitlis'] = maksimalais_skaitlis
+    session['slepenais_skaitlis'] = random.randint(1, maksimalais_skaitlis)
+    session['meginajumi'] = 0
+    session['start_time'] = time.time()
+    session['player_name'] = vards
 
     return jsonify({'status': 'success', 'message': f'Spēle sākta! Skaitļu diapazons: 1–{maksimalais_skaitlis}'}), 200
 
-# 🟢 Überprüfung des Rateversuchs
+#  Spēlētāja minējuma apstrāde
 @app.route('/guess', methods=['POST'])
 def guess():
-    """Nimmt den Benutzerraten und gibt Feedback zurück."""
+    """Apstrādā spēlētāja minējumu un sniedz atgriezenisko saiti."""
     dati = request.json
-    minejums = int(dati.get("guess"))  # Der Benutzerraten
-    session['meginajumi'] += 1  # Erhöht die Versuche
-    slepenais_skaitlis = session.get('slepenais_skaitlis', None)
+    minejums = int(dati.get("guess"))
+    session['meginajumi'] += 1
+
+    slepenais_skaitlis = session.get('slepenais_skaitlis')
     maksimalais_skaitlis = session.get('maksimalais_skaitlis', 100)
 
     if minejums < slepenais_skaitlis:
@@ -84,33 +93,25 @@ def guess():
     elif minejums > slepenais_skaitlis:
         return jsonify({'result': 'augstāk', 'message': f'Par lielu! Mēģini starp 1 un {minejums}.'}), 200
     else:
-        # Spiel beendet, speichere das Ergebnis
+        # Ja minēts pareizi – aprēķina laiku un saglabā rezultātu
         end_time = time.time()
-        time_taken = round(end_time - session['start_time'], 2)  # Berechnet die Zeit in Sekunden
+        time_taken = round(end_time - session['start_time'], 2)
 
-        # Ergebnisse speichern
         results = {
-            "name": session.get("player_name", "Anonīms"),  # Standardname, wenn keiner eingegeben wurde
-            "meginajumi": session['meginajumi'],
+            "vards": session.get("player_name", "Anonīms"),
+            "klikski": session['meginajumi'],
             "laiks": time_taken,
-            "level": session['maksimalais_skaitlis']
+            "limenis": session['maksimalais_skaitlis']
         }
 
-        # Speichert das Ergebnis in der Datei oder einer Datenbank
         try:
-            pievienot(results)  # Füge das Ergebnis in die Datenbank oder Datei ein
-            return jsonify({'result': 'pareizi', 'message': f'Pareizi! Tu minēji ar {session["meginajumi"]} mēģinājumiem. Laiks: {time_taken} sek.'}), 200
+            pievienot(results)
+            return jsonify({
+                'result': 'pareizi',
+                'message': f'Pareizi! Tu minēji ar {session["meginajumi"]} mēģinājumiem. Laiks: {time_taken} sek.'
+            }), 200
         except Exception as e:
             return jsonify({'status': 'error', 'message': str(e)}), 500
-
-# 🟢 Ergänzung für die Eingabe des Namens (falls du das im Frontend noch nicht machst)
-@app.route('/set_name', methods=['POST'])
-def set_name():
-    """Setzt den Spielernamen in der Sitzung."""
-    dati = request.json
-    name = dati.get("name", "Anonīms")
-    session['player_name'] = name
-    return jsonify({'status': 'success', 'message': f'Vārds ir iestatīts uz {name}'}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)

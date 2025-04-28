@@ -1,81 +1,73 @@
-<!-- Rangliste -->
 <!DOCTYPE html>
-<html>
+<html lang="lv">
 <head>
   <meta charset="UTF-8">
   <link href="static/style.css" rel="stylesheet">
-  <title>Atmiņas spēle</title>
+  <title>Uzmini skaitli!</title>
 </head>
 <body>
   <div class="wrapper">
+    <!-- Kopfzeile mit Navigation -->
     <div class="header">
-      <h1>Atmiņas spēle</h1>
+      <h1>Uzmini skaitli!</h1>
       <ul>
-        <li>
-          <a href="/">Sākums</a>
-        </li>
-        <li>
-          <a href="game">Spēle</a>
-        </li>
-        <li>
-          <a href="top">Tops</a>
-        </li>
-        <li>
-          <a href="about">Par</a>
-        </li>
+        <li><a href="/">Sākums</a></li>
+        <li><a href="game">Spēle</a></li>
+        <li><a href="top">Rezultāti</a></li>
+        <li><a href="about">Par</a></li>
       </ul>
-    </div> <!-- Beidzas header -->
+    </div> <!-- Ende Header -->
 
+    <!-- Hauptinhalt -->
     <div class="content">
-      <h3>Tops</h3>
-      <button onclick='pievienotTop()'>Pievienoties top'am</button>
-      <hr />
-      
+      <h2>Rezultātu tabula</h2>
+
       <!-- Tabelle für die Rangliste -->
-      <table class='tops'>
-        <tr>
-          <th>Spēlētājs</th>
-          <th>Laiks</th>
-          <th>Versiju skaits</th>
-          <th>Līmenis</th>
-        </tr>
-        <!-- Dynamische Einträge werden hier eingefügt -->
-        <tbody id="topResults"></tbody>
+      <table class="tops" border="1" cellpadding="8" cellspacing="0">
+        <thead>
+          <tr>
+            <th>Vārds</th>
+            <th>Mēģinājumi</th>
+            <th>Laiks (sek)</th>
+            <th>Līmenis</th>
+          </tr>
+        </thead>
+        <tbody id="rezultati"></tbody>
       </table>
+    </div> <!-- Ende content -->
 
-    </div> <!-- Beidzas content -->
+  </div> <!-- Ende wrapper -->
 
-  </div> <!-- Beidzas wrapper -->
-
+  <!-- JavaScript: lädt die Daten von /topData -->
   <script>
-    // Funktion zum Laden der Top-Ergebnisse (dynamisch)
-    function loadTopResults() {
-      fetch('/topData')
+    window.onload = function() {
+      fetch("/topData")
         .then(response => response.json())
         .then(data => {
-          const topResultsContainer = document.getElementById('topResults');
-          topResultsContainer.innerHTML = ''; // Leert die Tabelle
+          const tabula = document.getElementById("rezultati");
 
-          // Iteriere über jedes Ergebnis und füge es zur Tabelle hinzu
-          data.forEach(item => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-              <td>${item.vards}</td>
-              <td>${item.laiks} sekundes</td>
-              <td>${item.klikski}</td>
-              <td>${item.limenis}</td>
+          // Für jedes Ergebnis eine Tabellenzeile erstellen
+          data.forEach((spel) => {
+            const rinda = document.createElement("tr");
+
+            rinda.innerHTML = `
+              <td>${spel.vards}</td>
+              <td>${spel.klikski}</td>
+              <td>${spel.laiks}</td>
+              <td>${spel.limenis}</td>
             `;
-            topResultsContainer.appendChild(row);
+
+            tabula.appendChild(rinda);
           });
         })
-        .catch(error => console.error('Fehler beim Laden der Rangliste:', error));
-    }
-
-    // Aufruf der Funktion, wenn die Seite geladen wird
-    window.onload = loadTopResults;
+        .catch(err => {
+          document.getElementById("rezultati").innerHTML = `
+            <tr><td colspan="4">Kļūda ielādējot rezultātus!</td></tr>
+          `;
+          console.error("Kļūda:", err);
+        });
+    };
   </script>
-
-  <script src="static/top.js"></script>
 
 </body>
 </html>
