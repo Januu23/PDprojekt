@@ -8,5 +8,5 @@ function startSpeli() {
   }
 }
 // überleitung:{
-document.getElementById("Pieteikties spēlē").add EventListener="/game.html";
+document.getElementById("Pieteikties spēlē").add EventListener="game.html";
 }
