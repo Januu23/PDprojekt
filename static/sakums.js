@@ -7,6 +7,6 @@ function startSpeli() {
     window.location.href = 'game#' + encodeURIComponent(ievaditsVards);
   }
 }
-// überleitung:{
+// überleitung ("click" function(){
 document.getElementById("Pieteikties spēlē").add EventListener="game.html";
 }
