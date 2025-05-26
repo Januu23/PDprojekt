@@ -1,18 +1,16 @@
-// Šis skripts apstrādā spēles loģiku: minējumu sūtīšanu un rezultātu apstrādi
-
 let meginajumi = 0;
 let startLaiks;
 
-// Kad lapa ir ielādēta
+
 window.onload = function() {
     const vards = sessionStorage.getItem("playerName");
     const limenis = sessionStorage.getItem("playerLevel");
 
-    // Parādām spēlētāja vārdu un izvēlēto līmeni
+   
     document.getElementById("speleris").textContent = vards;
     document.getElementById("limenis").textContent = limenis;
 
-    // Sākam spēli uz servera
+   
     fetch("/start_game", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -31,11 +29,11 @@ window.onload = function() {
     });
 };
 
-// Kad lietotājs spiež uz "Minēt" pogas
+
 function makeGuess() {
     const guess = parseInt(document.getElementById("guessInput").value);
 
-    // Ja ievade nav derīga
+   
     if (isNaN(guess)) {
         alert("Lūdzu, ievadiet derīgu skaitli!");
         return;
@@ -52,12 +50,12 @@ function makeGuess() {
         document.getElementById("meginajumi").textContent = meginajumi;
         document.getElementById("message").textContent = data.message;
 
-        // Ja pareizi uzminēts
+     
         if (data.result === "pareizi") {
             const beiguLaiks = Date.now();
             const laiksSekundes = Math.floor((beiguLaiks - startLaiks) / 1000);
 
-            // Sagatavojam rezultātu objektu
+           
             const rezultats = {
                 vards: sessionStorage.getItem("playerName"),
                 klikskki: meginajumi,
