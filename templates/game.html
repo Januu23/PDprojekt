@@ -7,7 +7,6 @@
 </head>
 <body>
   <div class="wrapper">
-    <!-- Kopfzeile -->
     <div class="header">
       <h1>Uzmini skaitli!</h1>
       <ul>
@@ -16,33 +15,33 @@
         <li><a href="/top.html">Rezultāti</a></li>
         <li><a href="/about.html">Par</a></li>
       </ul>
-    </div> <!-- Ende Header -->
+    </div> 
 
-    <!-- Spielbereich -->
+ 
     <div class="content">
       <h2>Minēšanas spēle</h2>
 
-      <!-- Spielerinfo -->
+
       <p><strong>Spēlētājs:</strong> <span id="speleris"></span></p>
       <p><strong>Līmenis:</strong> <span id="limenis"></span></p>
       <p><strong>Mēģinājumi:</strong> <span id="meginajumi">0</span></p>
 
-      <!-- Rateeingabe -->
+    
       <label for="guessInput">Ievadi skaitli:</label><br>
       <input type="number" id="guessInput" placeholder="1 līdz ..."><br><br>
       <button onclick="makeGuess()">Minēt</button>
 
-      <!-- Nachricht -->
+
       <p id="message"></p>
 
       <br>
-      <!-- Link zur Rangliste -->
+   
       <button onclick="window.location.href='/top.html'">Uz rezultātiem</button>
-    </div> <!-- Ende Content -->
+    </div>
 
-  </div> <!-- Ende Wrapper -->
+  </div> 
 
-  <!-- Spiel-Logik -->
+
   <script>
     let meginajumi = 0;
     let startLaiks;
@@ -51,11 +50,11 @@
       const vards = sessionStorage.getItem("playerName");
       const limenis = sessionStorage.getItem("playerLevel");
 
-      // Name und Level anzeigen
+  
       document.getElementById("speleris").textContent = vards;
       document.getElementById("limenis").textContent = limenis;
 
-      // Spiel starten
+   
       fetch("/start_game", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -64,7 +63,7 @@
       .then(response => response.json())
       .then(data => {
         document.getElementById("message").textContent = data.message;
-        startLaiks = Date.now(); // Startzeit merken
+        startLaiks = Date.now(); 
       })
       .catch(err => {
         console.error("Kļūda startējot spēli:", err);
@@ -90,12 +89,12 @@
         document.getElementById("meginajumi").textContent = meginajumi;
         document.getElementById("message").textContent = data.message;
 
-        // Wenn richtig geraten
+     
         if (data.result === "pareizi") {
           const beiguLaiks = Date.now();
           const laiksSekundes = Math.floor((beiguLaiks - startLaiks) / 1000);
 
-          // Ergebnis richtig vorbereiten: mit "meginajumi", nicht "kliksski"
+      
           const rezultats = {
             vards: sessionStorage.getItem("playerName"),
             meginajumi: meginajumi,
@@ -111,7 +110,7 @@
           .then(() => {
             setTimeout(() => {
               alert(`Apsveicu! Tu uzminēji ar ${meginajumi} mēģinājumiem ${laiksSekundes} sekundēs!`);
-              window.location.href = "top.html";  // Weiterleitung zur Rangliste
+              window.location.href = "top.html"; 
             }, 500);
           })
           .catch(err => {
