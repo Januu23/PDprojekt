@@ -2,24 +2,24 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <link href="static/style.css" rel="stylesheet"> <!-- Verlinkung zu deiner CSS-Datei --> 
+  <link href="static/style.css" rel="stylesheet">
   <title>Uzmini skaitli!</title>
 </head>
 <body>
   <div class="wrapper">
-    <!-- Kopfzeile mit Navigation -->
+  
     <div class="header">
       <h1>Uzmini skaitli!</h1>
       <ul>
         <a href="/" title="sakums">sakums</a>
-        <li><a href="/game.html">Spēle</a></li> <!-- Verlinkung korrigiert -->
+        <li><a href="/game.html">Spēle</a></li> 
         <li><a href="/top.html">Rezultāti</a></li>
-        <li><a href="/about.html">Par</a></li> <!-- Verlinkung korrigiert -->
+        <li><a href="/about.html">Par</a></li> 
       </ul>
-    </div> <!-- Ende der Navigation -->
+    </div> 
 
     <div class="content">
-      <!-- Spielregeln -->
+    
       <h2>Noteikumi</h2>
       <ol>
         <li>Dators nejauši izvēlas skaitli no 1 līdz 100, 500 vai 1000 (atkarībā no līmeņa).</li>
@@ -33,7 +33,7 @@
         <li>Spēle beidzas, kad skaitlis ir uzminēts. Tiek parādīts, cik mēģinājumi bija nepieciešami un cik ilgi tas prasīja.</li>
       </ol>
 
-      <!-- Spieleranmeldung -->
+   
       <h2>Spēlētāja pieteikšanās</h2>
       <label for="vards">Ievadi savu vārdu:</label><br>
       <input type="text" id="vards" placeholder="Piemērs: Anna"><br><br>
@@ -45,30 +45,30 @@
         <option value="3">3. līmenis (1-1000)</option>
       </select><br><br>
 
-      <!-- Spiel starten -->
+     
       <button onclick="startGame()" id=Pieteikties spēlē >Pieteikties spēlē</button>
-    </div> <!-- Ende Inhalt -->
+    </div> 
 
-  </div> <!-- Ende Wrapper -->
+  </div> 
 
-  <!-- Script: speichert Name und Level in SessionStorage und leitet zur Spielseite weiter -->
+
   <script>
     function startGame() {
       let name = document.getElementById("vards").value;
       let level = document.getElementById("level").value;
 
-      // Prüfen, ob Name eingegeben wurde
+
       if (name.trim() === "") {
         alert("Lūdzu, ievadiet savu vārdu!");
         return;
       }
 
-      // Name und Level im Session-Speicher speichern
+   
       sessionStorage.setItem("playerName", name);
       sessionStorage.setItem("playerLevel", level);
 
-      // Zur Spielseite weiterleiten
-      window.location.href = "/game.html"; <!-- Weiterleitung zur Spielseite -->
+
+      window.location.href = "/game.html"; 
     }
   </script>
 
