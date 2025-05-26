@@ -1,14 +1,9 @@
-// Šis skripts ielādē top rezultātus no servera un parāda tos tabulā
-
 window.onload = function() {
-  // Iegūstam tabulas ķermeni, kurā liksim rezultātus
   const tabula = document.getElementById("rezultati");
 
-  // Izsauc fetch, lai dabūtu datus no Flask servera (no /topData)
   fetch("/topData")
-      .then(response => response.json()) // Pārvēršam atbildi JSON objektā
+      .then(response => response.json())
       .then(data => {
-          // Katrā datu ierakstā izveidojam jaunu rindu tabulā
           data.forEach((speleris) => {
               const rinda = document.createElement("tr");
 
