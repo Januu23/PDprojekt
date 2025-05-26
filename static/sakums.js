@@ -1,12 +1,12 @@
 function startSpeli() {
-  let ievaditsVards = document.querySelector('#vards').value.trim(); // .trim() entfernt führende und nachfolgende Leerzeichen
+  let ievaditsVards = document.querySelector('#vards').value.trim(); 
   if (ievaditsVards === '') {
     alert('Lūdzu ievadiet vārdu!');
   } else {
-    // Verwende encodeURIComponent, um sicherzustellen, dass der Name korrekt in der URL codiert wird
+
     window.location.href = 'game#' + encodeURIComponent(ievaditsVards);
   }
 }
-// überleitung ("click" function(){
+ ("click" function(){
 document.getElementById("Pieteikties spēlē").add EventListener="game.html";
 }
