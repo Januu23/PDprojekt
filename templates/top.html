@@ -7,22 +7,21 @@
 </head>
 <body>
   <div class="wrapper">
-    <!-- Kopfzeile mit Navigation -->
+   
     <div class="header">
       <h1>Uzmini skaitli!</h1>
       <ul>
         <li><a href="/">Sākums</a></li>
-        <li><a href="/game.html">Spēle</a></li> <!-- Verlinkung zu game.html korrigiert -->
-        <li><a href="/top.html">Rezultāti</a></li> <!-- Verlinkung zu top.html korrigiert -->
-        <li><a href="/about.html">Par</a></li> <!-- Verlinkung zu about.html korrigiert -->
+        <li><a href="/game.html">Spēle</a></li>
+        <li><a href="/top.html">Rezultāti</a></li> 
+        <li><a href="/about.html">Par</a></li> 
       </ul>
-    </div> <!-- Ende Header -->
+    </div>
 
-    <!-- Hauptinhalt -->
+
     <div class="content">
       <h2>Rezultātu tabula</h2>
 
-      <!-- Tabelle für die Rangliste -->
       <table class="tops" border="1" cellpadding="8" cellspacing="0">
         <thead>
           <tr>
@@ -34,19 +33,19 @@
         </thead>
         <tbody id="rezultati"></tbody>
       </table>
-    </div> <!-- Ende content -->
+    </div> 
 
-  </div> <!-- Ende wrapper -->
+  </div> 
 
-  <!-- JavaScript: lädt die Daten von /topData -->
+ 
   <script>
     window.onload = function() {
-      fetch("/topData")  <!-- Stelle sicher, dass dein Server diese Route unterstützt -->
+      fetch("/topData")  
         .then(response => response.json())
         .then(data => {
           const tabula = document.getElementById("rezultati");
 
-          // Für jedes Ergebnis eine Tabellenzeile erstellen
+         
           data.forEach((spel) => {
             const rinda = document.createElement("tr");
 
