@@ -1,27 +1,26 @@
-/* Basis-Styling für die gesamte Seite */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f0f8ff; /* Heller Hintergrund */
+    background-color: #f0f8ff;
     margin: 0;
     padding: 0;
 }
 
-/* Äußerer Rahmen */
+
 .wrapper {
     width: 90%;
     margin: 20px auto;
 }
 
-/* Navigation oben */
+
 .header {
-    background-color: #b650d4; /* Grüner Balken */
+    background-color: #b650d4; 
     color: white;
     padding: 10px;
     text-align: center;
     border-radius: 10px;
 }
 
-/* Navigationslinks */
+
 .header ul {
     list-style-type: none;
     padding: 0;
@@ -44,7 +43,7 @@ body {
     text-decoration: underline;
 }
 
-/* Hauptinhalt */
+
 .content {
     background-color: white;
     padding: 20px;
@@ -53,12 +52,12 @@ body {
     box-shadow: 0px 0px 10px lightgray;
 }
 
-/* Überschriften im Inhalt */
+
 .content h2, .content h3 {
     color: #333;
 }
 
-/* Eingabefelder und Auswahlfelder */
+
 input[type="text"],
 input[type="number"],
 select {
@@ -70,7 +69,7 @@ select {
     border-radius: 5px;
 }
 
-/* Buttons */
+
 button {
     background-color: #b650d4;
     color: white;
@@ -83,43 +82,43 @@ button {
 }
 
 button:hover {
-    background-color: #7616b6; /* Etwas dunkleres Grün beim Hover */
+    background-color: #7616b6; 
 }
 
-/* Tabellen */
+
 table.tops {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
 }
 
-/* Tabellenkopf */
+
 .tops th {
     background-color: #b650d4;
     color: white;
     padding: 10px;
 }
 
-/* Tabellenzellen */
+
 .tops td {
     border: 1px solid #ddd;
     padding: 10px;
     text-align: center;
 }
 
-/* Tabellenzeilen-Hovereffekt */
+
 .tops tr:hover {
     background-color: #f1f1f1;
 }
 
-/* Fehlernachrichten oder Hinweise */
+
 #message {
     font-size: 18px;
     font-weight: bold;
     margin-top: 15px;
 }
 
-/* Responsive für kleinere Bildschirme */
+
 @media (max-width: 768px) {
     .header ul li {
         display: block;
