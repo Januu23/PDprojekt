@@ -3,7 +3,7 @@ import sqlite3
 def get_top_results():
     conn = sqlite3.connect('dati.db')
     c = conn.cursor()
-    # Holt alle gespeicherten Ergebnisse aus der Datenbank
+  
     c.execute("SELECT * FROM rezultati")
     rezultati = c.fetchall()
     conn.close()
@@ -21,7 +21,7 @@ def get_top_results():
 def pievienot(dati):
     conn = sqlite3.connect('dati.db')
     c = conn.cursor()
-    # Fügt ein neues Ergebnis in die Datenbank ein
+  
     c.execute("""
         INSERT INTO rezultati(vards, meginajumi, laiks, limenis)
         VALUES(?, ?, ?, ?)
